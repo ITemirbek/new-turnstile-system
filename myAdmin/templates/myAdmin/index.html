@@ -1,0 +1,125 @@
+{% extends 'myAdmin/base_admin.html' %}
+{% load static %}
+{% block title %}
+   Users
+{% endblock %}
+
+{% block content %}
+   <li>
+      <div class="content-wrapper">
+         <div class="users-panel">
+            <div class="uk-flex uk-flex-between uk-flex-middle">
+               <form method="GET" action=''>
+                  <div class="uk-flex uk-flex-bottom">
+                     <div class="users-panel__field">
+                        <label>
+                           <input type="text" name='q' placeholder="Поиск ..." value='{{ request.GET.q }}'>
+                        </label>
+                     </div>
+                     
+                     <div class="users-panel__field">
+                        <button class="default-btn">Поиск</button>
+                     </div>
+                  </div>
+               </form>
+
+               <div class="users-panel-box uk-flex">
+                  <div class="users-panel__field">
+                     <button class="default-btn" type="button" uk-toggle="target: #modal-example">Добавить пользователя</button>
+
+                     <div id="modal-example" class="add-user-modal" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
+                           {% include 'myAdmin/register.html' %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="users-box">
+            <div id="users-table" class="users-table main-table">
+               <h2 class="main-wrapper text-title">Users</h2>
+
+               <form>
+                  <div class="users-panel__remove">
+                     <button>
+                        Удалить
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                     </button>
+                  </div>
+                  <div class="users-table__head main-table__head uk-flex uk-flex-between uk-flex-middle">
+                     <div>
+                        <label uk-tooltip="Выбрать все"><input id="select-all-cb" class="uk-checkbox" type="checkbox"></label>
+                     </div>
+                     <div>Username</div>
+                     <div>First name</div>
+                     <div>Last name</div>
+                     <div>Email</div>
+                     <div>Permission</div>
+                  </div>
+
+                  <div class="users-table__body">
+                     {% for user in users %}
+                        <a class="users-table__link main-table__row" href="{{ user.get_absolute_url }}">
+                           <div class="users-table__row uk-flex uk-flex-between">
+                              <div>
+                                 <label>
+                                    <input class="users-table__checkbox uk-checkbox" type="checkbox">
+                                 </label>
+                              </div>
+                              <div class="users-table__username">
+                                 <div class="uk-inline">
+                                    <span>{{ user.username }}</span>
+                                    {% if user.avatar %}
+                                       <div class="users-table__detail-img" uk-dropdown>
+                                          <img src="{{ user.avatar.url }}"  alt="User Avatar">
+                                       </div>
+                                    {% endif %}
+                                 </div>
+                              </div>
+                              <div>{{ user.email }}</div>
+                              <div>
+                                 {% if user.first_name %}
+                                    {{ user.first_name }}
+                                 {% else %}
+                                    Не заполнено
+                                 {% endif %}
+                              </div>
+                              <div>
+                                 {% if user.first_name %}
+                                    {{ user.last_name }}
+                                 {% else %}
+                                    Не заполнено
+                                 {% endif %}
+                              </div>
+                              <div class="users-table__status-box">
+                                 {% if user.is_active %}
+                                    <i class="fa fa-check-circle users-status-box__active" aria-hidden="true" uk-tooltip="Active"></i>
+                                 {% else %}
+                                    <i class="fa fa-check-circle " aria-hidden="true" uk-tooltip="Active"></i>
+                                 {% endif %}
+
+                                 {% if user.is_staff %}
+                                    <i class="fa fa-user users-status-box__active" aria-hidden="true" uk-tooltip="Staff"></i>
+                                 {% else %}
+                                    <i class="fa fa-user" aria-hidden="true" uk-tooltip="Staff"></i>
+                                 {% endif %}
+                                 
+                                 {% if user.is_superuser %}
+                                    <i class="fa fa-user-secret users-status-box__active" aria-hidden="true" uk-tooltip="Superuser"></i>
+                                 {% else %}
+                                    <i class="fa fa-user-secret " aria-hidden="true" uk-tooltip="Superuser"></i>
+                                 {% endif %}
+                              </div>
+                           </div>
+                        </a>
+                     {% endfor %}
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </li>
+{% endblock %}
+   
